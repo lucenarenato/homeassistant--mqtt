@@ -1,0 +1,66 @@
+version: '3.0'
+  
+services:
+  homeassistant:
+    container_name: homeassistant
+    # image: ghcr.io/home-assistant/home-assistant:stable
+    image: lscr.io/linuxserver/homeassistant:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+    healthcheck:
+          test: 'curl -m 90 -sLf http://localhost:8123 || date >> /config/healthcheck' #| pkill -9 python3'
+          interval: 90s
+          timeout: 60s
+          retries: 2
+    privileged: true
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    restart: unless-stopped
+    volumes:
+      - /opt/homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+       - "8123"
+    # ports:
+    #   - '8123:8123'
+    # network_mode: host
+    
+  mosquitto:
+    container_name: mosquitto
+    # image: eclipse-mosquitto:latest
+    build:
+      context: ./mosquito
+    environment:
+      - TZ=America/Sao_Paulo
+    volumes:
+      - type: bind
+        source: ./mosquitto/config/
+        target: /mosquitto/config/
+      - type: bind
+        source: ./mosquitto/log/
+        target: /mosquitto/log/
+      - type: volume
+        source: data
+        target: /mosquitto/data/
+    ports:
+      - target: 1883
+        published: 1883
+        protocol: tcp
+        mode: host
+      - target: 9001
+        published: 9001
+        protocol: tcp
+        mode: host
+    restart: always
+
+# networks:
+#   default:
+#     name: webproxy
+#     external: true
+
+volumes:
+  data:
+    name: "mqtt-broker-data"
