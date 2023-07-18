@@ -56,10 +56,10 @@ services:
         mode: host
     restart: always
 
-networks:
-  default:
-    name: webproxy
-    external: true
+# networks:
+#   default:
+#     name: webproxy
+#     external: true
 
 volumes:
   data:
