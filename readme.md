@@ -16,3 +16,9 @@ docker run -d \
 MY_TIME_ZONE is a tz database name, like TZ=America/Los_Angeles.
 
 docker restart homeassistant
+
+
+## Mosquitto
+
+
+>  The default user is admin/password.

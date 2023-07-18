@@ -1,3 +1,17 @@
 FROM eclipse-mosquitto:latest
 COPY mosquitto-docker.conf /mosquitto/config/mosquitto.conf
 COPY keys /mosquitto/config/keys
+
+ARG UID
+ARG GID
+ARG USER
+
+RUN if [ ${USER} != "root" ]; then \
+        apk add shadow && \
+        groupadd -f -g ${GID} ${USER} && \
+        useradd -m -g ${USER} -u ${UID} ${USER}; \
+    fi
+
+RUN chown -R ${USER}:${USER} /mosquitto
+
+USER ${USER}
