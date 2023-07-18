@@ -37,10 +37,10 @@ services:
       - TZ=America/Sao_Paulo
     volumes:
       - type: bind
-        source: ./config/
+        source: ./mosquitto/config/
         target: /mosquitto/config/
       - type: bind
-        source: ./log/
+        source: ./mosquitto/log/
         target: /mosquitto/log/
       - type: volume
         source: data
