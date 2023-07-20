@@ -45,7 +45,7 @@ services:
   #   restart: unless-stopped
   mosquitto:
     build:
-      context: ./mosquito
+      context: ./mosquitto
     container_name: mosquitto
     restart: unless-stopped
     ports:
